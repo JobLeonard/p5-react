@@ -91,6 +91,7 @@ export class Sketch extends PureComponent {
 				break;
 			case 'undefined':
 				style.width = style.width ? style.width : '100%';
+				break;
 			default:
 				break;
 		}
