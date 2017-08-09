@@ -16,14 +16,14 @@ const sketch = (width, height, props) => {
   return function (p5) {
     let value = props.value;
     p5.setup = () => {
-      p5.strokeWeight(10);
+      p5.strokeWeight(50);
     }
 
     p5.draw = () => {
-      p5.fill(value, 128);
+      p5.fill(value, 16);
       p5.noStroke();
       p5.rect(0, 0, width, height);
-      p5.stroke(255);
+      p5.stroke((value + 128) % 256);
       p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
     };
 
