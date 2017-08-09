@@ -24,7 +24,7 @@ const sketch = (width, height, props) => {
 }
 
 ```
-- **DO NOT USE `createCanvas` in p5.setup! Canvas size depends on the container that holds the sketch.
+- **DO NOT USE `createCanvas` in p5.setup!** The size depends on the container that holds the sketch, and the Sketch component handles this logic.
 - You can either use CSS to give it a size, or pass a `width` and/or `height` prop (which can be both a number or CSS again).
 - The sketch remounts upon resize, making sure it is the correct size if, for example, you pass a percentage
 - An optional `p5.receiveProps` function can be defined to pass props passed to the Sketch component onto the p5 sketch code.
