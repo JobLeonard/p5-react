@@ -31,6 +31,10 @@ const sketch = (width, height, props) => {
       console.log(nextProps.value)
       value = nextProps.value;
     };
+
+    p5.unmount = () => {
+      console.log('The sketch was unmounted. Width was ' + width + ', height was ' + height);
+    }
   }
 };
 
@@ -49,7 +53,7 @@ class App extends Component {
           sketch={sketch}
           width={'80%'}
           height={'80%'}
-          value={this.state.value}
+          sketchProps={{ value: this.state.value}}
         />
         <p>
           Click to change current value being passed as a prop to the sketch: {this.state.value}

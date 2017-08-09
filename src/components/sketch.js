@@ -8,7 +8,7 @@ import p5 from 'p5';
 // auto-resizing the sketch to fill its parent container.
 // To determine size/layout, we just use CSS on the div containing
 // the Sketch component (we might use this with flexbox, for example).
-export class Sketch extends PureComponent {
+class SketchComponent extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -26,10 +26,10 @@ export class Sketch extends PureComponent {
 			const width = (view.clientWidth * ratio) | 0;
 			const height = (view.clientHeight * ratio) | 0;
 			let newState = { view, width, height, ratio };
-			let { sketch, noCanvas } = this.props;
+			let { sketch, sketchProps, noCanvas } = this.props;
 			if (sketch) {
 				const _sketch = (p5) => {
-					sketch(width, height, this.props)(p5);
+					sketch(width, height, sketchProps)(p5);
 
 					// handle creation of canvas
 					const _setup = p5.setup ? p5.setup : () => { };
@@ -60,13 +60,12 @@ export class Sketch extends PureComponent {
 	componentWillReceiveProps(nextProps) {
 		// pass relevant props to sketch
 		const { sketch } = this.state;
-		if (sketch.receiveProps) {
-			sketch.receiveProps(nextProps);
+		if (sketch.receiveProps && nextProps.sketchProps) {
+			sketch.receiveProps(nextProps.sketchProps);
 		}
 	}
 
 	componentWillUnmount() {
-		console.log(this.state)
 		if (this.state.sketch) {
 			this.state.sketch.unmount();
 		}
@@ -114,20 +113,35 @@ export class Sketch extends PureComponent {
 
 		style.margin = style.margin ? style.margin : '0 auto';
 		return (
-			<RemountOnResize
-				/* Since canvas interferes with CSS layouting,
-				we unmount and remount it on resize events */
-				watchedVal={props.watchedVal}
-			>
-				<div
-					ref={this.mountedView}
-					style={style}
-					className={props.className}
-				/>
-
-			</RemountOnResize>
+			<div
+				ref={this.mountedView}
+				style={style}
+				className={props.className}
+			/>
 		);
 	}
 }
 
 
+export class Sketch extends PureComponent {
+	render() {
+		const { props } = this;
+		return (
+			<RemountOnResize
+				/* Since canvas interferes with CSS layouting,
+				we unmount and remount it on resize events */
+				watchedVal={props.watchedVal}
+			>
+				<SketchComponent
+					sketch={props.sketch}
+					sketchProps={props.sketchProps}
+					noCanvas={props.noCanvas}
+					width={props.width}
+					height={props.height}
+					style={props.style}
+					className={props.className}
+				/>
+			</RemountOnResize>
+		);
+	}
+}
